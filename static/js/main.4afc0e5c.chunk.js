@@ -1,0 +1,2 @@
+(this["webpackJsonpcalendar-react"]=this["webpackJsonpcalendar-react"]||[]).push([[0],{10:function(e,c,t){"use strict";t.r(c);var n=t(1),r=t.n(n),a=t(3),s=t.n(a),d=(t(8),t(0));var i=function(){return Object(d.jsx)("div",{className:"App",children:Object(d.jsx)("header",{className:"App-header",children:Object(d.jsx)("h1",{children:"Hello!"})})})};s.a.render(Object(d.jsx)(r.a.StrictMode,{children:Object(d.jsx)(i,{})}),document.getElementById("root"))},8:function(e,c,t){}},[[10,1,2]]]);
+//# sourceMappingURL=main.4afc0e5c.chunk.js.map
