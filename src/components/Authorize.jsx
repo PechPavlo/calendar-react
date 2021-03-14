@@ -1,13 +1,15 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Authorize = (props) => {
   const { users, currentUser, setAuthorizedUser } = props;
-  console.log('auth', users, currentUser);
   const [userToAuthorize, setUserToAuthorize] = useState(currentUser.data.name);
+  useEffect(() => {
+    setUserToAuthorize(currentUser.data.name);
+  }, [currentUser]);
   const handleChange = (event) => {
     setUserToAuthorize(event.target.value);
-    console.log('auth1', userToAuthorize);
+    // console.log('auth1', userToAuthorize);
   };
   return (
     <div className="modal_wrapper active" id="authorize-modal">

@@ -8,14 +8,19 @@ import Authorize from './components/Authorize';
 function App() {
   const initUsers = [{ id: 'a6a136dc-fd2b-4073-a1ae-214589cc73e6', data: { isAdmin: true, name: 'test', password: '' } }];
   const [usersData, setUsers] = useState([...initUsers]);
+  const [mEevents, setMyEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(true);
   const [currentUser, setCurrentUser] = useState(initUsers[0]);
+  const [filteredByUser, setFilteredByUser] = useState('All');
 
   const getUsers = async () => {
     setUsers(await service.get('users'));
-    console.log(usersData);
+    setMyEvents(await service.get('events'));
+    setCurrentUser(usersData[0]);
     setIsLoading(false);
+    setIsAuthorized(false);
+    console.log('after', usersData, currentUser, mEevents);
     // if (users === null) {
     //   props.team.map((member) => ServiceAPI.create('users', new User(member, '')));
     //   setTimeout(ServiceAPI.create('users', new Admin('Boss', 'superPassword')), 500);
@@ -29,13 +34,25 @@ function App() {
 
   useEffect(() => {
     if (isLoading) getUsers();
-    console.log('Вы', usersData, isLoading);
-  });
+    console.log('Вы', usersData, isLoading, currentUser, mEevents);
+  }, [mEevents, usersData]);
 
-  const setAuthorizedUser = (user) => {
+  const setAuthorizedUser = (userToSet) => {
     setIsAuthorized(true);
-    // setCurrentUser(user);
-    console.log(user);
+    setCurrentUser(usersData.find((user) => user.data.name === userToSet));
+    // console.log(userToSet, currentUser);
+  };
+
+  const handleChangeUser = () => {
+    setIsAuthorized(false);
+  };
+
+  const handlerNewEvent = () => {
+    console.log('New Event');
+  };
+
+  const handlerFilteredByUser = (userToFilter) => {
+    setFilteredByUser(userToFilter);
   };
 
   if (isLoading) {
@@ -50,7 +67,13 @@ function App() {
           setAuthorizedUser={setAuthorizedUser}
         />
       )}
-      <Header />
+      <Header
+        users={usersData}
+        changeUser={handleChangeUser}
+        changeFilteredByUser={handlerFilteredByUser}
+        newEvent={handlerNewEvent}
+        filteredByUser={filteredByUser}
+      />
       <Table />
       {/* {isLoading && <span className="loading-ring" />} */}
       {/* <NewEvent /> */}
