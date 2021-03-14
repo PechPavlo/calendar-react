@@ -6,6 +6,7 @@ const Authorize = (props) => {
   const [userToAuthorize, setUserToAuthorize] = useState(currentUser.data.name);
   useEffect(() => {
     setUserToAuthorize(currentUser.data.name);
+    // console.log('auth0', currentUser, userToAuthorize);
   }, [currentUser]);
   const handleChange = (event) => {
     setUserToAuthorize(event.target.value);
@@ -24,7 +25,7 @@ const Authorize = (props) => {
             <option
               className="user"
               value={user.data.name}
-              key={user.data.id}
+              key={user.id}
             >
               {user.data.name}
             </option>

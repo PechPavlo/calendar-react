@@ -25,7 +25,7 @@ const Header = (props) => {
           onChange={handleChange}
         >
           {team.map((member) => (
-            <option className="member" value={member}>
+            <option className="member" value={member} key={`filter-${member}`}>
               {member === 'All' ? 'All members' : member}
             </option>
           ))}

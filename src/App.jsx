@@ -15,12 +15,14 @@ function App() {
   const [filteredByUser, setFilteredByUser] = useState('All');
 
   const getUsers = async () => {
-    setUsers(await service.get('users'));
-    setMyEvents(await service.get('events'));
-    setCurrentUser(usersData[0]);
+    const users = await service.get('users');
+    const events = await service.get('events');
+    setCurrentUser(users[0]);
+    setUsers(users);
+    setMyEvents(events);
     setIsLoading(false);
     setIsAuthorized(false);
-    console.log('after', usersData, currentUser, mEevents);
+    // console.log('after', usersData, currentUser, mEevents);
     // if (users === null) {
     //   props.team.map((member) => ServiceAPI.create('users', new User(member, '')));
     //   setTimeout(ServiceAPI.create('users', new Admin('Boss', 'superPassword')), 500);
@@ -35,7 +37,7 @@ function App() {
   useEffect(() => {
     if (isLoading) getUsers();
     console.log('Вы', usersData, isLoading, currentUser, mEevents);
-  }, [mEevents, usersData]);
+  }, [isLoading]);
 
   const setAuthorizedUser = (userToSet) => {
     setIsAuthorized(true);
