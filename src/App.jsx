@@ -1,26 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import Context from './components/context';
 import Header from './components/Header';
 // import NewEvent from './components/NewEvent/NewEvent';
 import Table from './components/Table';
 import service from './components/services/API_service_decorator';
 import Authorize from './components/Authorize';
+import DeleteModal from './components/DeleteModal';
 
 function App() {
   const initUsers = [{ id: 'a6a136dc-fd2b-4073-a1ae-214589cc73e6', data: { isAdmin: true, name: 'test', password: '' } }];
   const [usersData, setUsers] = useState([...initUsers]);
-  const [mEevents, setMyEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [myEvents, setMyEvents] = useState([]);
+  const [eventToDelete, setEventToDelete] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [isEventsUpdated, setIsEventsUpdated] = useState(false);
+  const [isUsersUpdated, setIsUsersUpdated] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(true);
   const [currentUser, setCurrentUser] = useState(initUsers[0]);
   const [filteredByUser, setFilteredByUser] = useState('All');
 
   const getUsers = async () => {
     const users = await service.get('users');
-    const events = await service.get('events');
     setCurrentUser(users[0]);
     setUsers(users);
-    setMyEvents(events);
-    setIsLoading(false);
+    // setIsLoading(false);
+    setIsUsersUpdated(true);
     setIsAuthorized(false);
     // console.log('after', usersData, currentUser, mEevents);
     // if (users === null) {
@@ -34,10 +38,22 @@ function App() {
     // props.users?.map((user) => deleteEntity('users', user.id)); // to delete all users!!!
   };
 
+  const getEvents = async () => {
+    const events = await service.get('events');
+    setMyEvents(events);
+    // setIsLoading(false);
+    setIsEventsUpdated(true);
+  };
+
   useEffect(() => {
-    if (isLoading) getUsers();
-    console.log('Вы', usersData, isLoading, currentUser, mEevents);
-  }, [isLoading]);
+    if (!isUsersUpdated) getUsers();
+    // console.log('isUsersUpdated', usersData, isUsersUpdated, currentUser, myEvents);
+  }, [isUsersUpdated]);
+
+  useEffect(() => {
+    if (!isEventsUpdated) getEvents();
+    // console.log('isEventsUpdated', usersData, isEventsUpdated, currentUser, myEvents);
+  }, [isEventsUpdated]);
 
   const setAuthorizedUser = (userToSet) => {
     setIsAuthorized(true);
@@ -57,11 +73,17 @@ function App() {
     setFilteredByUser(userToFilter);
   };
 
-  if (isLoading) {
-    return <span className="loading-ring" />;
+  if (!isUsersUpdated) {
+    return (
+      <div>
+        <p>Loading ...</p>
+        <span className="loading-ring" />
+      </div>
+    );
   }
   return (
-    <div className="App">
+    <Context.Provider value={[myEvents, currentUser, setEventToDelete]}>
+      {/* <div className="App"> */}
       {!isAuthorized && (
         <Authorize
           users={usersData}
@@ -69,7 +91,14 @@ function App() {
           setAuthorizedUser={setAuthorizedUser}
         />
       )}
+      { eventToDelete && (
+      <DeleteModal
+        eventToDelete={eventToDelete}
+        setIsEventsUpdated={setIsEventsUpdated}
+      />
+      )}
       <Header
+        isAdmin={currentUser.data.isAdmin}
         users={usersData}
         changeUser={handleChangeUser}
         changeFilteredByUser={handlerFilteredByUser}
@@ -79,7 +108,8 @@ function App() {
       <Table />
       {/* {isLoading && <span className="loading-ring" />} */}
       {/* <NewEvent /> */}
-    </div>
+      {/* </div> */}
+    </Context.Provider>
   );
 }
 

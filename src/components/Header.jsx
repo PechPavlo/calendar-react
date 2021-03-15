@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 const Header = (props) => {
   const {
-    users, changeUser, filteredByUser, changeFilteredByUser, newEvent,
+    users, changeUser, filteredByUser, changeFilteredByUser, newEvent, isAdmin,
   } = props;
   const team = [...users.map((user) => user.data.name), 'All'];
   const [filteredByUserHeader, setFilteredByUserHeader] = useState(filteredByUser);
@@ -31,7 +31,7 @@ const Header = (props) => {
           ))}
         </select>
         <button className="change_user-btn" type="button" onClick={() => changeUser()}>Change User</button>
-        <button className="add-event-btn" type="button" onClick={() => newEvent()}>New event +</button>
+        {isAdmin && <button className="add-event-btn" type="button" onClick={() => newEvent()}>New event +</button>}
       </div>
     </div>
   );

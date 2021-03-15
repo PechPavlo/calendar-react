@@ -15,7 +15,7 @@ class APIServiceDecorator {
   async get(entity) {
     const result = await this.service.get(entity);
     let finisedResult = null;
-    if (result.error) {
+    if (result && result.error) {
       this.showErrorMessage(`in ${entity}: ${result.error}`);
     }
     if (result) {

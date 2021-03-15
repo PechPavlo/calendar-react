@@ -35,6 +35,7 @@ li {
     display: inline-block;
     width  : 80px;
     height : 80px;
+    margin: 0 auto;
 }
 
 .loading-ring:after {
@@ -42,7 +43,10 @@ li {
     display      : block;
     width        : 64px;
     height       : 64px;
+    margin: 0 auto;
+
     margin       : 8px;
+
     border-radius: 50%;
     border       : 6px solid rgba(224, 96, 96, 0.883);
     border-color : rgba(224, 96, 96, 0.883) transparent rgba(224, 96, 96, 0.883) transparent;
