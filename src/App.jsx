@@ -82,7 +82,7 @@ function App() {
     );
   }
   return (
-    <Context.Provider value={[myEvents, currentUser, setEventToDelete]}>
+    <Context.Provider value={[myEvents, currentUser, setEventToDelete, filteredByUser]}>
       {/* <div className="App"> */}
       {!isAuthorized && (
         <Authorize
