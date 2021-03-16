@@ -16,7 +16,7 @@ class APIServiceDecorator {
     const result = await this.service.get(entity);
     let finisedResult = null;
     if (result && result.error) {
-      finisedResult = result;
+      return result;
       // this.showErrorMessage(`in ${entity}: ${result.error}`);
     }
     if (result) {
@@ -26,10 +26,9 @@ class APIServiceDecorator {
   }
 
   async create(entity, entityBody) {
-    let finisedResult = {};
+    const finisedResult = {};
     const result = await this.service.create(entity, `{"data":"${JSON.stringify(entityBody).replaceAll('"', '\\"')}"}`);
     if (result.error) {
-      finisedResult = result;
       return result;
       // this.showErrorMessage(`in ${entity}: ${result.error}`);
     }
@@ -42,7 +41,8 @@ class APIServiceDecorator {
     const finisedResult = {};
     const result = await this.service.change(entity, id, `{"data":"${JSON.stringify(entityBody).replaceAll('"', '\\"')}"}`);
     if (result.error) {
-      this.showErrorMessage(`in ${entity}: ${result.error}`);
+      return result;
+      // this.showErrorMessage(`in ${entity}: ${result.error}`);
     }
     finisedResult.id = result.id;
     finisedResult.data = JSON.parse(result.data.replaceAll('\\"', '"'));
@@ -52,7 +52,7 @@ class APIServiceDecorator {
   async delete(entity, id) {
     const result = await this.service.delete(entity, id);
     if (result.error) {
-      this.showErrorMessage(`in ${entity}: ${result.error}`);
+      // this.showErrorMessage(`in ${entity}: ${result.error}`);
     }
     console.log(result);
     return result;

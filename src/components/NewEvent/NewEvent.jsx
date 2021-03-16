@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../assets/style/NewEvent.scss';
 import service from '../services/API_service_decorator';
 import MyEvent from '../MyEvent';
@@ -22,18 +22,14 @@ const NewEvent = (props) => {
   const [newTime, setNewTime] = useState(times[0]);
   const [newName, setNewName] = useState('');
   const [membersList, setMembersList] = useState([]);
-  // console.log('new mem', membersList);
   const handleAddEvent = async (event) => {
     event.preventDefault();
     if (event.target.id === 'cancel_add' || event.target.id === 'add-modal') setEventToAdd(null);
     if (myEvents.find((myEvent) => myEvent.data.dayTime === `${newDay}${newTime}`)) {
-      // console.log('isBooked');
       setIsFree(false);
     } else {
-      console.log('myEvents', myEvents, newDay, newTime);
-      // eslint-disable-next-line max-len
       const result = await service.create('events', new MyEvent(newDay, newTime, newName, membersList));
-      console.log(result);
+
       if (!result.error) {
         setIsAllOk(true);
         setTimeout(() => {

@@ -24,7 +24,6 @@ function App() {
     const users = await service.get('users');
     setCurrentUser(users[0]);
     setUsers(users);
-    // setIsLoading(false);
     setIsUsersUpdated(true);
     setIsAuthorized(false);
     // console.log('after', usersData, currentUser, mEevents);
@@ -59,7 +58,6 @@ function App() {
   const setAuthorizedUser = (userToSet) => {
     setIsAuthorized(true);
     setCurrentUser(usersData.find((user) => user.data.name === userToSet));
-    // console.log(userToSet, currentUser);
   };
 
   const handleChangeUser = () => {
@@ -68,7 +66,6 @@ function App() {
 
   const handlerNewEvent = () => {
     setEventToAdd('some');
-    console.log('New Event');
   };
 
   const handlerFilteredByUser = (userToFilter) => {
@@ -88,7 +85,6 @@ function App() {
       myEvents, currentUser, setEventToDelete, filteredByUser,
     }}
     >
-      {/* <div className="App"> */}
       {!isAuthorized && (
         <Authorize
           users={usersData}
@@ -119,8 +115,6 @@ function App() {
         filteredByUser={filteredByUser}
       />
       <Table />
-      {/* {isLoading && <span className="loading-ring" />} */}
-      {/* </div> */}
     </Context.Provider>
   );
 }
