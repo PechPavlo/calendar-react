@@ -7,26 +7,33 @@ const Table = () => {
 
   return (
     <table className="calendar">
-      <tr className="calendar-header">
-        {['Name', ...days].map((day) => (
-          <th className="calendar_header-item">{day}</th>
-        ))}
-      </tr>
-      {times.map((time) => (
-        <tr className="calendar-row">
-          {['Name', ...days].map((day) => (day === 'Name' ? (
-            <td className="calendar_row-item">{`${time}:00`}</td>
-          ) : (
-            <td
-              className="calendar_row-item"
-              draggable="true"
-              data-time={`${day}${time}`}
-            >
-              <Cell />
-            </td>
-          )))}
+      <thead>
+        <tr className="calendar-header">
+          {['Name', ...days].map((day) => (
+            <th className="calendar_header-item" key={`thead-${day}`}>{day}</th>
+          ))}
         </tr>
-      ))}
+      </thead>
+      <tbody>
+        {times.map((time) => (
+          <tr className="calendar-row" key={`tbody-tr-${time}`}>
+            {['Name', ...days].map((day) => (day === 'Name' ? (
+              <td className="calendar_row-item" key={`tbody-${time}`}>{`${time}:00`}</td>
+            ) : (
+              <td
+                className="calendar_row-item"
+                draggable="true"
+                data-time={`${day}${time}`}
+                key={`tbody-${day}${time}`}
+              >
+                <Cell
+                  dayTime={`${day}${time}`}
+                />
+              </td>
+            )))}
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 };

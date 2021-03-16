@@ -32,75 +32,88 @@ li {
 
 
 .loading-ring {
-  display: inline-block;
-  width: 80px;
-  height: 80px;
+    display: inline-block;
+    width  : 80px;
+    height : 80px;
+    margin: 0 auto;
 }
+
 .loading-ring:after {
-  content: " ";
-  display: block;
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border-radius: 50%;
-  border: 6px solid rgba(224, 96, 96, 0.883);
-  border-color: rgba(224, 96, 96, 0.883) transparent rgba(224, 96, 96, 0.883) transparent;
-  animation: loading-ring 1.2s linear infinite;
+    content      : " ";
+    display      : block;
+    width        : 64px;
+    height       : 64px;
+    margin: 0 auto;
+
+    margin       : 8px;
+
+    border-radius: 50%;
+    border       : 6px solid rgba(224, 96, 96, 0.883);
+    border-color : rgba(224, 96, 96, 0.883) transparent rgba(224, 96, 96, 0.883) transparent;
+    animation    : loading-ring 1.2s linear infinite;
 }
+
 @keyframes loading-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .loading-ripple {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
+    display : inline-block;
+    position: relative;
+    width   : 80px;
+    height  : 80px;
 }
+
 .loading-ripple div {
-  position: absolute;
-  border: 4px solid #cef;
-  opacity: 1;
-  border-radius: 50%;
-  animation: loading-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    position     : absolute;
+    border       : 4px solid #cef;
+    opacity      : 1;
+    border-radius: 50%;
+    animation    : loading-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
+
 .loading-ripple div:nth-child(2) {
-  animation-delay: -0.5s;
+    animation-delay: -0.5s;
 }
+
 @keyframes loading-ripple {
-  0% {
-    top: 36px;
-    left: 36px;
-    width: 0;
-    height: 0;
-    opacity: 1;
-  }
-  100% {
-    top: 0px;
-    left: 0px;
-    width: 72px;
-    height: 72px;
-    opacity: 0;
-  }
+    0% {
+        top    : 36px;
+        left   : 36px;
+        width  : 0;
+        height : 0;
+        opacity: 1;
+    }
+
+    100% {
+        top    : 0px;
+        left   : 0px;
+        width  : 72px;
+        height : 72px;
+        opacity: 0;
+    }
 }
 
 
-button{
+button {
     background-color: $btn-color;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
+
 .modal_wrapper {
     visibility      : hidden;
     position        : absolute;
     left            : 0;
+    top             : 0;
     width           : 100vw;
     height          : 100vh;
     background-color: rgba(128, 128, 128, 0.5);
@@ -185,7 +198,8 @@ td:first-child {
     background-color: lavender;
 }
 
-.add-event-btn, .change_user-btn {
+.add-event-btn,
+.change_user-btn {
     height       : 2rem;
     width        : 7rem;
     margin-left  : 2rem;
@@ -298,6 +312,39 @@ td:first-child {
         justify-content : space-around;
         color           : white;
         background-color: red;
+        border-radius   : 50%;
+        width           : 2rem;
+        height          : 2rem;
+        padding-left    : 1px;
+        padding-bottom  : 2px;
+    }
+}
+
+.add_modal-no-error {
+    visibility      : hidden;
+    width           : 100%;
+    height          : 4rem;
+    display         : flex;
+    justify-content : space-between;
+    align-items     : center;
+    color           : rgb(0, 88, 4);
+    background-color: rgba(119, 230, 67, 0.363);
+    padding         : 10px;
+    font-size       : 20px;
+    border-radius   : 8px 8px 0 0;
+
+
+    &.booked {
+        visibility: visible;
+    }
+
+    &::before {
+        content         : '\2714';
+        display         : flex;
+        align-items     : center;
+        justify-content : space-around;
+        color           : greenyellow;
+        background-color: white;
         border-radius   : 50%;
         width           : 2rem;
         height          : 2rem;
@@ -537,9 +584,9 @@ td.selected>.calendar_cell {
     // }
 
     .add_modal-container {
-        left  : calc((100vw - 26rem) / 2);
+        left     : calc((100vw - 26rem) / 2);
         // top   : -35rem;
-        width : 26rem;
+        width    : 26rem;
         // height: 34rem;
     }
 
@@ -564,12 +611,13 @@ td.selected>.calendar_cell {
         justify-content: space-between;
         align-items    : center;
         width          : 95%;
-        height: 5rem;
-        font-size: 1rem;
+        height         : 5rem;
+        font-size      : 1rem;
     }
+
     .controls {
         justify-content: space-evenly;
-        width: 100%;
+        width          : 100%;
     }
 
     table {
@@ -590,9 +638,11 @@ td.selected>.calendar_cell {
             font-size: 0.6rem;
         }
     }
+
     .calendar_cell_participants {
         width: 5rem;
     }
+
     .calendar_cell_participant {
         padding: 6px;
     }
