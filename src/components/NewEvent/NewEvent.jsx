@@ -1,157 +1,119 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../assets/style/NewEvent.scss';
+import service from '../services/API_service_decorator';
+import MyEvent from '../MyEvent';
+import AddDropdown from '../AddDropdown';
 
-const NewEvent = () => (
-  <div className="modal_wrapper active" id="add-modal">
-    <div className="add_modal-container">
-      <div className="add_modal-error">
-        <span>Failed to create an event. Time slot is already booked.</span>
-        <button id="add_modal-error_btn" />
-      </div>
-      <form id="add-form">
-        <label className="add_lable" htmlFor="#new_event-name">
-          Name of the event:
-          <input
-            className="add_form-name"
-            id="new_event-name"
-            placeholder="Event name"
-            required=""
-            maxLength="25"
-          />
-        </label>
-        <label className="add_lable" htmlFor="add_select">
-          Participants:
-          <div className="add_dropdown" data-drop="down">
-            <div className="add_dropdown-main" data-drop="down">
-              <span className="add_dropdown-selected" data-drop="down">
-                chose participants
-              </span>
-              <select
-                className="add_dropdown-fake_select"
-                data-drop="down"
-              />
-            </div>
-            <div className="add_dropdown-content" data-drop="down">
-              <label className="member" data-drop="down">
-                Maria
-                <input
-                  className="member-selected-to-add"
-                  type="checkbox"
-                  value="Maria"
-                  data-drop="down"
-                />
-              </label>
-              <label className="member" data-drop="down">
-                Bob
-                <input
-                  className="member-selected-to-add"
-                  type="checkbox"
-                  value="Bob"
-                  data-drop="down"
-                />
-              </label>
-              <label className="member" data-drop="down">
-                Alex
-                <input
-                  className="member-selected-to-add"
-                  type="checkbox"
-                  value="Alex"
-                  data-drop="down"
-                />
-              </label>
-              <label className="member" data-drop="down">
-                Boss
-                <input
-                  className="member-selected-to-add"
-                  type="checkbox"
-                  value="Boss"
-                  data-drop="down"
-                />
-              </label>
-              <label className="member" data-drop="down">
-                All members
-                <input
-                  className="member-selected-to-add"
-                  type="checkbox"
-                  value="All"
-                  data-drop="down"
-                />
-              </label>
-            </div>
-          </div>
-          <input
-            id="add_select"
-            form="add-form"
-            required=""
-            data-drop="down"
-          />
-        </label>
-        <label className="add_lable">
-          Day:
-          <select className="add_day">
-            <option className="day" selected="" value="Monday">
-              Monday
-            </option>
-            <option className="day" value="Tuesday">
-              Tuesday
-            </option>
-            <option className="day" value="Wednesday">
-              Wednesday
-            </option>
-            <option className="day" value="Thursday">
-              Thursday
-            </option>
-            <option className="day" value="Friday">
-              Friday
-            </option>
-          </select>
-        </label>
-        <label className="add_lable">
-          Time:
-          <select className="add_time">
-            <option className="time" selected="" value="10">
-              10:00
-            </option>
-            <option className="time" value="11">
-              11:00
-            </option>
-            <option className="time" value="12">
-              12:00
-            </option>
-            <option className="time" value="13">
-              13:00
-            </option>
-            <option className="time" value="14">
-              14:00
-            </option>
-            <option className="time" value="15">
-              15:00
-            </option>
-            <option className="time" value="16">
-              16:00
-            </option>
-            <option className="time" value="17">
-              17:00
-            </option>
-            <option className="time" value="18">
-              18:00
-            </option>
-          </select>
-        </label>
-      </form>
-      <div className="add_modal-footer">
-        <button className="cancel_add_event-btn" id="cancel_add">
-          Cancel
-        </button>
-        <button className="create_add_event-btn" id="create_add" form="add-form">
-          Create
-        </button>
+const NewEvent = (props) => {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const times = [10, 11, 12, 13, 14, 15, 16, 17, 18];
+  const {
+    users, setEventToAdd, setIsEventsUpdated, myEvents,
+  } = props;
+  const [isFree, setIsFree] = useState(true);
+  const [isAllOk, setIsAllOk] = useState(false);
+  const [newDay, setNewDay] = useState(days[0]);
+  const [newTime, setNewTime] = useState(times[0]);
+  const [newName, setNewName] = useState('');
+  const [membersList, setMembersList] = useState([]);
+  // console.log('new mem', membersList);
+  const handleAddEvent = async (event) => {
+    event.preventDefault();
+    if (event.target.id === 'cancel_add' || event.target.id === 'add-modal') setEventToAdd(null);
+    if (myEvents.find((myEvent) => myEvent.data.dayTime === `${newDay}${newTime}`)) {
+      // console.log('isBooked');
+      setIsFree(false);
+    } else {
+      console.log('myEvents', myEvents, newDay, newTime);
+      // eslint-disable-next-line max-len
+      const result = await service.create('events', new MyEvent(newDay, newTime, newName, membersList));
+      console.log(result);
+      if (!result.error) {
+        setIsAllOk(true);
+        setTimeout(() => {
+          setEventToAdd(null);
+          setIsEventsUpdated(false);
+          setIsAllOk(false);
+        }, 3000);
+      }
+    }
+  };
+  return (
+    <div className="modal_wrapper active" id="add-modal">
+      <div className="add_modal-container">
+        <div className={`add_modal-error ${!isFree && 'booked'}`}>
+          <span>Failed to create an event. Time slot is already booked.</span>
+          <button id="add_modal-error_btn" onClick={() => setIsFree(true)} />
+        </div>
+        <div className={`add_modal-no-error ${isAllOk && 'booked'}`}>
+          <span>The new event has succesfuly created.</span>
+        </div>
+        <form id="add-form" onSubmit={handleAddEvent}>
+          <label className="add_lable">
+            Name of the event:
+            <input
+              className="add_form-name"
+              id="new_event-name"
+              placeholder="Event name"
+              type="text"
+              required
+              minLength="1"
+              maxLength="25"
+              onChange={(ev) => setNewName(ev.target.value)}
+            />
+          </label>
+          <label className="add_lable" htmlFor="add_select">
+            Participants:
+            <AddDropdown
+              users={users}
+              setMembersList={setMembersList}
+            />
+            <input
+              id="add_select"
+              form="add-form"
+              required
+              data-drop="down"
+              value={membersList.length ? membersList.join(', ') : ''}
+            />
+          </label>
+          <label className="add_lable">
+            Day:
+            <select className="add_day" defaultValue={newDay} onChange={(ev) => setNewDay(ev.target.value)}>
+              {days.map((day) => (
+                <option className="day" value={day} key={`new-day-${day}`}>
+                  {day}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="add_lable">
+            Time:
+            <select className="add_time" defaultValue={newTime} onChange={(ev) => setNewTime(ev.target.value)}>
+              {times.map((time) => (
+                <option className="time" value={time} key={`new-time-${time}`}>
+                  {`${time}:00`}
+                </option>
+              ))}
+            </select>
+          </label>
+        </form>
+        <div className="add_modal-footer">
+          <button className="cancel_add_event-btn" id="cancel_add" onClick={handleAddEvent}>
+            Cancel
+          </button>
+          <button className="create_add_event-btn" id="create_add" form="add-form" type="submit">
+            Create
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default NewEvent;

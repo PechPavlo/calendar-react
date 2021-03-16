@@ -6,11 +6,9 @@ const Authorize = (props) => {
   const [userToAuthorize, setUserToAuthorize] = useState(currentUser.data.name);
   useEffect(() => {
     setUserToAuthorize(currentUser.data.name);
-    // console.log('auth0', currentUser, userToAuthorize);
   }, [currentUser]);
   const handleChange = (event) => {
     setUserToAuthorize(event.target.value);
-    // console.log('auth1', userToAuthorize);
   };
   return (
     <div className="modal_wrapper active" id="authorize-modal">

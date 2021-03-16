@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Context from './components/context';
 import Header from './components/Header';
-// import NewEvent from './components/NewEvent/NewEvent';
+import NewEvent from './components/NewEvent/NewEvent';
 import Table from './components/Table';
 import service from './components/services/API_service_decorator';
 import Authorize from './components/Authorize';
@@ -12,6 +12,7 @@ function App() {
   const [usersData, setUsers] = useState([...initUsers]);
   const [myEvents, setMyEvents] = useState([]);
   const [eventToDelete, setEventToDelete] = useState(null);
+  const [eventToAdd, setEventToAdd] = useState(null);
   // const [isLoading, setIsLoading] = useState(true);
   const [isEventsUpdated, setIsEventsUpdated] = useState(false);
   const [isUsersUpdated, setIsUsersUpdated] = useState(false);
@@ -66,6 +67,7 @@ function App() {
   };
 
   const handlerNewEvent = () => {
+    setEventToAdd('some');
     console.log('New Event');
   };
 
@@ -82,7 +84,10 @@ function App() {
     );
   }
   return (
-    <Context.Provider value={[myEvents, currentUser, setEventToDelete, filteredByUser]}>
+    <Context.Provider value={{
+      myEvents, currentUser, setEventToDelete, filteredByUser,
+    }}
+    >
       {/* <div className="App"> */}
       {!isAuthorized && (
         <Authorize
@@ -97,6 +102,14 @@ function App() {
         setIsEventsUpdated={setIsEventsUpdated}
       />
       )}
+      {eventToAdd && (
+        <NewEvent
+          users={usersData}
+          setEventToAdd={setEventToAdd}
+          setIsEventsUpdated={setIsEventsUpdated}
+          myEvents={myEvents}
+        />
+      )}
       <Header
         isAdmin={currentUser.data.isAdmin}
         users={usersData}
@@ -107,7 +120,6 @@ function App() {
       />
       <Table />
       {/* {isLoading && <span className="loading-ring" />} */}
-      {/* <NewEvent /> */}
       {/* </div> */}
     </Context.Provider>
   );

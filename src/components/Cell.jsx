@@ -3,11 +3,12 @@ import React, { useContext } from 'react';
 import Context from './context';
 
 const Cell = (props) => {
-  const [myEvents, currentUser, setEventToDelete, filteredByUser] = useContext(Context);
+  const {
+    myEvents, currentUser, setEventToDelete, filteredByUser,
+  } = useContext(Context);
   const { dayTime } = props;
   const myEvent = myEvents?.find((elem) => elem.data.dayTime === dayTime);
   const isInFilter = myEvent?.data.participants.includes(filteredByUser);
-  console.log(isInFilter);
   const { isAdmin } = currentUser.data;
   if (myEvent && (isInFilter || filteredByUser === 'All')) {
     return (
