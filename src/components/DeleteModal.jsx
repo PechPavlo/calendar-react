@@ -23,7 +23,6 @@ const DeleteModal = (props) => {
         }, 3000);
       }
     }
-    // console.log('eventToDelete', event.target.id, eventToDelete);
   };
   return (
     <div className="modal_wrapper active" id="delete-modal" onClick={handleDeleteModal}>
