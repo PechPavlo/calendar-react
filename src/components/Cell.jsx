@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
-import React, { useContext } from 'react';
-import Context from './context';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateEventToDelete } from '../redux/actions';
 
 const Cell = (props) => {
-  const {
-    myEvents, currentUser, setEventToDelete, filteredByUser,
-  } = useContext(Context);
+  const dispatch = useDispatch();
+  const filteredByUser = useSelector((state) => state.filteredByUser);
+  const currentUser = useSelector((state) => state.currentUser);
+  const myEvents = useSelector((state) => state.myEvents);
+
   const { dayTime } = props;
   const myEvent = myEvents?.find((elem) => elem.data.dayTime === dayTime);
   const isInFilter = myEvent?.data.participants.includes(filteredByUser);
@@ -22,7 +25,7 @@ const Cell = (props) => {
             className="calendar_cell-del_btn"
             data-del_btn={dayTime}
             type="button"
-            onClick={() => setEventToDelete(myEvent)}
+            onClick={() => dispatch(updateEventToDelete(myEvent))}
           >
             &#10006;
           </button>

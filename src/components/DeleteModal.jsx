@@ -1,24 +1,24 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable react/prop-types */
-import React, { useState, useContext } from 'react';
-import Context from './context';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateIsEventsUpdated, updateEventToDelete } from '../redux/actions';
 import service from './services/API_service_decorator';
 
-const DeleteModal = (props) => {
-  const { eventToDelete, setIsEventsUpdated } = props;
-  const { setEventToDelete } = useContext(Context);
+const DeleteModal = () => {
+  const dispatch = useDispatch();
+  const eventToDelete = useSelector((state) => state.eventToDelete);
   const [isAllOk, setIsAllOk] = useState(false);
   const handleDeleteModal = async (event) => {
-    if (event.target.id === 'no_delete' || event.target.id === 'delete-modal') setEventToDelete(null);
+    if (event.target.id === 'no_delete' || event.target.id === 'delete-modal') dispatch(updateEventToDelete(null));
     if (event.target.id === 'yes_delete') {
       const result = await service.delete('events', eventToDelete.id);
 
       if (!result.error) {
         setIsAllOk(true);
         setTimeout(() => {
-          setIsEventsUpdated(false);
-          setEventToDelete(null);
+          dispatch(updateIsEventsUpdated(false));
+          dispatch(updateEventToDelete(null));
           setIsAllOk(false);
         }, 3000);
       }
