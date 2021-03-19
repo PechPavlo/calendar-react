@@ -22,7 +22,7 @@ const AddDropdown = (props) => {
 
   //   console.log(whoIsChecked, isChecked);
 
-  const handleAddDropdown = (event) => {
+  const handleAddDropdown = () => {
     setIsActive(!isActive);
     setMembersList(newMembersList);
   };

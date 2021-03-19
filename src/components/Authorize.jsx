@@ -1,9 +1,18 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateCurrentUser, updateIsAuthorized } from '../redux/actions';
 
-const Authorize = (props) => {
-  const { users, currentUser, setAuthorizedUser } = props;
+const Authorize = () => {
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users);
+  const currentUser = useSelector((state) => state.currentUser);
   const [userToAuthorize, setUserToAuthorize] = useState(currentUser.data.name);
+
+  const setAuthorizedUser = (userToSet) => {
+    dispatch(updateIsAuthorized(true));
+    dispatch(updateCurrentUser(users.find((user) => user.data.name === userToSet)));
+  };
+
   useEffect(() => {
     setUserToAuthorize(currentUser.data.name);
   }, [currentUser]);

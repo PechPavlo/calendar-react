@@ -1,21 +1,22 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import '../../assets/style/NewEvent.scss';
 import service from '../services/API_service_decorator';
 import MyEvent from '../MyEvent';
 import AddDropdown from '../AddDropdown';
+import { updateEventToAdd, updateIsEventsUpdated } from '../../redux/actions';
 
-const NewEvent = (props) => {
+const NewEvent = () => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   const times = [10, 11, 12, 13, 14, 15, 16, 17, 18];
-  const {
-    users, setEventToAdd, setIsEventsUpdated, myEvents,
-  } = props;
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users);
+  const myEvents = useSelector((state) => state.myEvents);
   const [isFree, setIsFree] = useState(true);
   const [isAllOk, setIsAllOk] = useState(false);
   const [newDay, setNewDay] = useState(days[0]);
@@ -24,17 +25,25 @@ const NewEvent = (props) => {
   const [membersList, setMembersList] = useState([]);
   const handleAddEvent = async (event) => {
     event.preventDefault();
-    if (event.target.id === 'cancel_add' || event.target.id === 'add-modal') setEventToAdd(null);
-    if (myEvents.find((myEvent) => myEvent.data.dayTime === `${newDay}${newTime}`)) {
+    if (event.target.id === 'cancel_add' || event.target.id === 'add-modal') {
+      dispatch(updateEventToAdd(null));
+    } else if (
+      myEvents.find(
+        (myEvent) => myEvent.data.dayTime === `${newDay}${newTime}`,
+      )
+    ) {
       setIsFree(false);
     } else {
-      const result = await service.create('events', new MyEvent(newDay, newTime, newName, membersList));
+      const result = await service.create(
+        'events',
+        new MyEvent(newDay, newTime, newName, membersList),
+      );
 
       if (!result.error) {
         setIsAllOk(true);
         setTimeout(() => {
-          setEventToAdd(null);
-          setIsEventsUpdated(false);
+          dispatch(updateEventToAdd(null));
+          dispatch(updateIsEventsUpdated(false));
           setIsAllOk(false);
         }, 3000);
       }
@@ -66,10 +75,7 @@ const NewEvent = (props) => {
           </label>
           <label className="add_lable" htmlFor="add_select">
             Participants:
-            <AddDropdown
-              users={users}
-              setMembersList={setMembersList}
-            />
+            <AddDropdown users={users} setMembersList={setMembersList} />
             <input
               id="add_select"
               form="add-form"
@@ -80,7 +86,11 @@ const NewEvent = (props) => {
           </label>
           <label className="add_lable">
             Day:
-            <select className="add_day" defaultValue={newDay} onChange={(ev) => setNewDay(ev.target.value)}>
+            <select
+              className="add_day"
+              defaultValue={newDay}
+              onChange={(ev) => setNewDay(ev.target.value)}
+            >
               {days.map((day) => (
                 <option className="day" value={day} key={`new-day-${day}`}>
                   {day}
@@ -90,7 +100,11 @@ const NewEvent = (props) => {
           </label>
           <label className="add_lable">
             Time:
-            <select className="add_time" defaultValue={newTime} onChange={(ev) => setNewTime(ev.target.value)}>
+            <select
+              className="add_time"
+              defaultValue={newTime}
+              onChange={(ev) => setNewTime(ev.target.value)}
+            >
               {times.map((time) => (
                 <option className="time" value={time} key={`new-time-${time}`}>
                   {`${time}:00`}
@@ -100,10 +114,19 @@ const NewEvent = (props) => {
           </label>
         </form>
         <div className="add_modal-footer">
-          <button className="cancel_add_event-btn" id="cancel_add" onClick={handleAddEvent}>
+          <button
+            className="cancel_add_event-btn"
+            id="cancel_add"
+            onClick={handleAddEvent}
+          >
             Cancel
           </button>
-          <button className="create_add_event-btn" id="create_add" form="add-form" type="submit">
+          <button
+            className="create_add_event-btn"
+            id="create_add"
+            form="add-form"
+            type="submit"
+          >
             Create
           </button>
         </div>
