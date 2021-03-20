@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  updateCurrentUser,
-  updateUsers,
+  getUsers,
   updateMyEvents,
-  updateIsAuthorized,
   updateIsEventsUpdated,
 } from './redux/actions';
 import Header from './components/Header';
@@ -20,15 +18,7 @@ function App() {
   const eventToAdd = useSelector((state) => state.eventToAdd);
   const eventToDelete = useSelector((state) => state.eventToDelete);
   const isEventsUpdated = useSelector((state) => state.isEventsUpdated);
-  const [isUsersUpdated, setIsUsersUpdated] = useState(false);
-
-  const getUsers = async () => {
-    const newUsers = await service.get('users');
-    dispatch(updateCurrentUser(newUsers[0]));
-    dispatch(updateUsers(newUsers));
-    setIsUsersUpdated(true);
-    dispatch(updateIsAuthorized(false));
-  };
+  const isUsersUpdated = useSelector((state) => state.isUsersUpdated);
 
   const getEvents = async () => {
     const events = await service.get('events');
@@ -37,7 +27,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (!isUsersUpdated) getUsers();
+    if (!isUsersUpdated) dispatch(getUsers());
   }, [isUsersUpdated]);
 
   useEffect(() => {

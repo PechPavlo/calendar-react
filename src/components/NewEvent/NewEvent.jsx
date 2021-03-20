@@ -82,6 +82,7 @@ const NewEvent = () => {
               required
               data-drop="down"
               value={membersList.length ? membersList.join(', ') : ''}
+              onChange={(ev) => console.log(ev.target.value)}
             />
           </label>
           <label className="add_lable">
