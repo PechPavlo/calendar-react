@@ -46,7 +46,7 @@ const AddDropdown = (props) => {
       </div>
       <div className="add_dropdown-content" data-drop="down">
         {team.map((member) => (
-          <label className="member" data-drop="down">
+          <label className="member" data-drop="down" key={`drop-${member}`}>
             {member === 'All' ? 'All members' : member}
             <input
               className="member-selected-to-add"
